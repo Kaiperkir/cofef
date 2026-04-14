@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Manrope", sans-serif;
+  --color-brand-dark: #0A0A0A;
+  --color-brand-accent: #D4AF37;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html, body {
+  background-color: #FDFCFB; 
+  color: var(--color-brand-dark);
+  margin: 0;
+  scrollbar-width: none;
+}
+
+/* Class to instantly switch theme without staggered animations */
+.disable-transitions,
+.disable-transitions * {
+  transition: none !important;
+}
+
+html.dark body {
+  background-color: #0A0A0A; 
+  color: #FDFCFB;
+}
+body::-webkit-scrollbar { display: none; }
+
+img {
+  transition: opacity 0.5s ease-in-out, transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.snap-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-section {
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+}
+
+/* Custom scrollbar for modals and inner containers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(10, 10, 10, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(212, 175, 55, 0.5); /* Gold hover */
+}
+
+
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glowing text */
+.text-glow {
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}

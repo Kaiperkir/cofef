@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Чашка Уюта - Бутик спешелти кофе и премиального чая. Мы отобрали лучшие лоты от топовых обжарщиков и плантаторов." />
+    <meta name="keywords" content="кофе, specialty coffee, спешелти кофе, купить кофе, элитный чай, кофейня, свежая обжарка" />
+    <meta name="author" content="Чашка Уюта" />
+    
+    <!-- Open Graph (для соцсетей) -->
+    <meta property="og:title" content="Чашка Уюта | Спешелти кофе" />
+    <meta property="og:description" content="Бутик спешелти кофе и премиального чая с отборными лотами." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    
+    <title>Чашка Уюта | Спешелти кофе</title>
+    
+    <script>
+      // Мгновенное применение темы до отрисовки страницы
+      try {
+        document.documentElement.classList.add('disable-transitions');
+        
+        const themeStorage = localStorage.getItem('theme-storage');
+        if (themeStorage) {
+          const { state } = JSON.parse(themeStorage);
+          if (state && state.theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } else {
+          // По умолчанию темная тема
+          document.documentElement.classList.add('dark');
+        }
+        
+        // Снимаем блокировку после отрисовки первого кадра
+        setTimeout(() => {
+          document.documentElement.classList.remove('disable-transitions');
+        }, 10);
+      } catch (e) {
+        console.error('Ошибка при чтении темы', e);
+      }
+    </script>
+  </head>
+  <body class="bg-brand-light">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
