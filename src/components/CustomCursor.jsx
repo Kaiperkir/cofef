@@ -47,7 +47,7 @@ export default function CustomCursor() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-[#D4AF37] pointer-events-none z-[9999] hidden md:flex items-center justify-center"
+      className="fixed top-0 left-0 w-8 h-8 rounded-full border border-[#C06334] dark:border-[#D4AF37] pointer-events-none z-[9999] hidden md:flex items-center justify-center"
       style={{ 
         x: cursorXSpring, 
         y: cursorYSpring,
@@ -56,7 +56,7 @@ export default function CustomCursor() {
       }}
       animate={{ 
         scale: isHovering ? 1.8 : 1,
-        backgroundColor: isHovering ? 'rgba(212, 175, 55, 0.15)' : 'transparent'
+        backgroundColor: isHovering ? 'rgba(192, 99, 52, 0.15)' : 'transparent'
       }}
       transition={{ duration: 0.2 }}
     />

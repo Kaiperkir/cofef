@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      String   @default("USER")
-  createdAt DateTime @default(now())
-  orders    Order[]
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  password     String
+  role         String    @default("USER")
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+  refreshToken String?
+  orders       Order[]
 }
 
 model Category {
@@ -24,31 +26,33 @@ model Category {
 }
 
 model Product {
-  id          Int              @id @default(autoincrement())
-  name        String
-  brand       String?
-  barcode     String?          @unique
-  description String?
-  imageUrl    String?
-  categoryId  Int
-  roast       String?
-  acid        Float?
-  body        Float?
-  sca         Float?
-  region      String?
-  origin      String?
-  notes       String?
-  composition String?
-  prep_method String?
-  brewing_temp String?
+  id            Int              @id @default(autoincrement())
+  name          String
+  brand         String?
+  barcode       String?          @unique
+  description   String?
+  imageUrl      String?
+  categoryId    Int
+  roast         String?
+  acid          Float?
+  body          Float?
+  sca           Float?
+  region        String?
+  origin        String?
+  notes         String?
+  composition   String?
+  prep_method   String?
+  brewing_temp  String?
   steeping_time String?
-  tea_type    String?
-  storage     String?
-  isTop       Boolean          @default(false)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  category    Category         @relation(fields: [categoryId], references: [id])
-  variants    ProductVariant[]
+  tea_type      String?
+  storage       String?
+  isTop         Boolean          @default(false)
+  isWeekly      Boolean          @default(false)
+  isSpecialty   Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  category      Category         @relation(fields: [categoryId], references: [id])
+  variants      ProductVariant[]
 }
 
 model ProductVariant {
@@ -57,6 +61,7 @@ model ProductVariant {
   weight    Int
   price     Int
   stock     Int     @default(0)
+  oldPrice  Int?
   product   Product @relation(fields: [productId], references: [id])
 }
 
@@ -64,7 +69,7 @@ model Order {
   id        Int         @id @default(autoincrement())
   userId    Int?
   total     Int
-  status    String      @default("PENDING") // PENDING, PAID, ASSEMBLING, DELIVERING, COMPLETED, CANCELLED
+  status    String      @default("PENDING")
   address   String?
   phone     String?
   comment   String?

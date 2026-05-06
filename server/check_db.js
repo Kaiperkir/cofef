@@ -1,0 +1,15 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+async function main() {
+  const count = await prisma.product.count();
+  console.log(`Product count: ${count}`);
+  const categories = await prisma.category.count();
+  console.log(`Category count: ${categories}`);
+  process.exit(0);
+}
+
+main().catch(e => {
+  console.error(e);
+  process.exit(1);
+});

@@ -3,14 +3,26 @@
 @theme {
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Manrope", sans-serif;
-  --color-brand-dark: #0A0A0A;
-  --color-brand-accent: #D4AF37;
+  --font-price: "Inter", "Manrope", sans-serif;
+  --color-brand-dark: #1C1614;
+  --color-brand-accent: #C06334;
+  --color-gold: #D4AF37;
+}
+
+/* Шрифт для цен и чисел — Inter с табличными цифрами, курсив */
+.font-price {
+  font-family: "Inter", "Manrope", sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1, "kern" 1;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.01em;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 html, body {
-  background-color: #FDFCFB; 
+  background-color: #F6F1E9; 
   color: var(--color-brand-dark);
   margin: 0;
   scrollbar-width: none;
@@ -23,8 +35,8 @@ html, body {
 }
 
 html.dark body {
-  background-color: #0A0A0A; 
-  color: #FDFCFB;
+  background-color: #140F0D; 
+  color: #F6F1E9;
 }
 body::-webkit-scrollbar { display: none; }
 
@@ -40,7 +52,7 @@ img {
 }
 
 .snap-section {
-  height: 100vh;
+  min-height: 100vh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   position: relative;
@@ -58,7 +70,7 @@ img {
   border-radius: 10px;
 }
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(212, 175, 55, 0.5); /* Gold hover */
+  background-color: rgba(192, 99, 52, 0.5); /* Gold hover */
 }
 
 
@@ -80,5 +92,5 @@ img {
 
 /* Glowing text */
 .text-glow {
-  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  text-shadow: 0 0 20px rgba(192, 99, 52, 0.4);
 }
