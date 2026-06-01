@@ -15,6 +15,7 @@ import (
 	"craft-coffee-backend/internal/storage/postgres"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 )
 
 func main() {
@@ -37,6 +38,13 @@ func main() {
 
 	r := chi.NewRouter()
 
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	}))
 	// Передаем логгер в слой хендлеров
 	h := handlers.New(p, log)
 
@@ -45,6 +53,8 @@ func main() {
 		w.Write([]byte("Coffee API is alive! ☕"))
 	})
 	r.Get("/api/categories", h.GetCategories)
+
+	r.Get("/api/products", h.GetProducts)
 
 	// Настройка сервера
 	srv := &http.Server{

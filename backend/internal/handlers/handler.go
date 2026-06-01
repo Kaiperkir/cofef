@@ -12,6 +12,7 @@ import (
 // и упрощает тестирование за счет использования моков.
 type Storage interface {
 	GetCategories(ctx context.Context) ([]postgres.Category, error)
+	GetProducts(ctx context.Context) ([]postgres.Product, error)
 }
 
 // Handler объединяет все HTTP-обработчики и хранит зависимости
