@@ -1,0 +1,7 @@
+# Binaries
+/api
+/cmd/api/api
+
+# IDEs
+.idea/
+.vscode/
