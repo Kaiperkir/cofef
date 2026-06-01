@@ -7,6 +7,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getPlaceholderImage } from '../utils/placeholders';
 import Header from '../components/Header';
 
+/**
+ * Shopping cart page for viewing selected items, updating quantities, and proceeding to checkout.
+ */
 export default function CartPage() {
   const { items, removeFromBasket, updateQuantity, clearBasket } = useBasketStore();
   const { token } = useAuthStore();

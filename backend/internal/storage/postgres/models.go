@@ -27,3 +27,19 @@ type Product struct {
 	IsActive    bool             `json:"isActive"`
 	Variants    []ProductVariant `json:"variants"` // Сюда мы положим варианты
 }
+
+type User struct {
+	ID              int64   `json:"id"`
+	Phone           string  `json:"phone"`
+	Email           *string `json:"email,omitempty"`
+	Password        string  `json:"-"` // Скрываем пароль из JSON
+	FullName        string  `json:"fullName"`
+	DeliveryAddress *string `json:"deliveryAddress,omitempty"`
+	Role            string  `json:"role"`
+}
+
+type RegisterRequest struct {
+	Phone    string `json:"phone"`
+	Password string `json:"password"`
+	FullName string `json:"fullName"`
+}

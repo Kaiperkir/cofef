@@ -31,6 +31,9 @@ const FooterHeading = ({ children }) => (
   </h4>
 );
 
+/**
+ * Footer component displaying site navigation links and information.
+ */
 export default function Footer() {
   const year = new Date().getFullYear();
 

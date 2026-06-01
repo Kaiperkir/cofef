@@ -35,6 +35,9 @@ const PageFade = ({ children, noFooter }) => (
   </motion.div>
 );
 
+/**
+ * Main application component that sets up routing, theming, and layout structure.
+ */
 function App() {
   const verifySession = useAuthStore(state => state.verifySession);
   useEffect(() => {

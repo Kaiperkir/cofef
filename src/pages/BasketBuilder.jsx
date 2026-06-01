@@ -19,6 +19,9 @@ const STEPS = [
   ]}
 ];
 
+/**
+ * Interactive basket builder page allowing users to customize their coffee order step-by-step.
+ */
 export default function BasketBuilder() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selections, setSelections] = useState({ box: null, coffee: null, sweets: null });

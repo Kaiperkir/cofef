@@ -298,6 +298,9 @@ export const ProductCard = React.memo(({ item, index, onAdd, onOpenDetails, view
 
 const PAGE_SIZE = 21;
 
+/**
+ * Catalog page displaying products with search, filtering, and add-to-cart functionality.
+ */
 export default function Catalog() {
   const { products, loading, error, fetchProducts, viewCols, setViewCols } = useProductStore();
   const [selectedProduct, setSelectedProduct] = useState(null);

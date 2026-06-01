@@ -52,6 +52,7 @@ func (s *Storage) GetCategories(ctx context.Context) ([]Category, error) {
 	return res, nil
 }
 
+// GetProducts возвращает список всех активных продуктов вместе с их категориями и вариантами.
 func (s *Storage) GetProducts(ctx context.Context) ([]Product, error) {
 	// 1. Запрос товаров + JOIN категорий
 	queryProducts := `

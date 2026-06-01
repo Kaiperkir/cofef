@@ -231,6 +231,9 @@ const stagger = {
   show: { transition: { staggerChildren: 0.1 } }
 };
 
+/**
+ * Guide page showing detailed articles or guides about coffee brewing and selection.
+ */
 export default function Guide() {
   const { id } = useParams();
   const guide = guides[id] || guides.v60;

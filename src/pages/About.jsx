@@ -2,6 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Clock, Phone, Mail, Instagram } from 'lucide-react';
 
+/**
+ * About page detailing information about the coffee shop, its mission, and team.
+ */
 export default function About() {
   return (
     <div className="min-h-screen bg-[#F6F1E9] dark:bg-[#140F0D] pt-32 pb-20 font-sans text-[#1C1614] dark:text-[#F6F1E9]">

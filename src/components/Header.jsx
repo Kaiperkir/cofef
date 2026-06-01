@@ -7,6 +7,9 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useThemeStore } from '../store/useThemeStore';
 import { useFavoritesStore } from '../store/useFavoritesStore';
 
+/**
+ * Header component featuring navigation, logo, and links to user profile, favorites, and cart.
+ */
 export default function Header() {
   const items = useBasketStore(state => state.items) || [];
   const user = useAuthStore(state => state.user);

@@ -6,6 +6,9 @@ import { useBasketStore } from '../store/useBasketStore';
 import { useNavigate } from 'react-router-dom';
 import ProductManager from '../components/ProductManager';
 
+/**
+ * User profile page displaying user details, order history, and options like logging out or managing products (for admins).
+ */
 export default function Profile() {
   const { user, token, logout } = useAuthStore();
   const navigate = useNavigate();

@@ -4,6 +4,9 @@ import { MoveRight, Mail, Lock, User, AlertCircle, KeyRound, ChevronDown } from 
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 
+/**
+ * Authentication page for handling user login and registration.
+ */
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState('');

@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+/**
+ * Zustand store for managing favorite products (toggle favorites, check if favorite).
+ */
 export const useFavoritesStore = create(
   persist(
     (set, get) => ({

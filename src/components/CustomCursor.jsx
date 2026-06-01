@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
+/**
+ * Custom animated cursor component that follows mouse movements and interacts with clickable elements.
+ */
 export default function CustomCursor() {
   // Используем useMotionValue вместо useState для координат, 
   // чтобы избежать ререндеров React при каждом движении мыши!

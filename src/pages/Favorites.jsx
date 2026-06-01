@@ -7,6 +7,9 @@ import { HeartCrack, Heart, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
+/**
+ * Favorites page displaying the user's saved favorite products.
+ */
 export default function Favorites() {
   const favoritesIds = useFavoritesStore(state => state.favorites) || [];
   const { products, loading, fetchProducts, viewCols } = useProductStore();

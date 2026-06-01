@@ -46,6 +46,9 @@ const OrderTimer = ({ createdAt, status }) => {
   );
 };
 
+/**
+ * Admin page for managing and viewing all user orders and their statuses.
+ */
 export default function OrderManagement() {
   const { user, token } = useAuthStore();
   const [orders, setOrders] = useState([]);

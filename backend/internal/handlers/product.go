@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// GetProducts обрабатывает GET /api/products и возвращает список продуктов.
 func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	const op = "handlers.GetProducts"
 	h.log.Info("fetching products", slog.String("op", op))

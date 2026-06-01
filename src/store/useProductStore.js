@@ -4,6 +4,9 @@ import { useAuthStore } from './useAuthStore';
 
 const API_URL = 'http://127.0.0.1:5000/api';
 
+/**
+ * Zustand store for managing product data (fetching, adding, deleting products).
+ */
 export const useProductStore = create((set, get) => ({
   products: [],
   loading: false,

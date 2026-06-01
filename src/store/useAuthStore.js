@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+/**
+ * Zustand store for managing user authentication state (tokens, login, logout, session verification).
+ */
 export const useAuthStore = create(
   persist(
     (set, get) => ({

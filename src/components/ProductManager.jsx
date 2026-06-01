@@ -6,6 +6,9 @@ import { useAuthStore } from '../store/useAuthStore';
 import { getPlaceholderImage } from '../utils/placeholders';
 import axios from 'axios';
 
+/**
+ * Admin component for managing products (adding, editing, deleting) with a modal interface.
+ */
 export default function ProductManager({ user }) {
   const { products, loading, fetchProducts, deleteProduct } = useProductStore();
   const { token } = useAuthStore();

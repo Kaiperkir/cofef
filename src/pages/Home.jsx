@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import Footer from '../components/Footer';
 
+/**
+ * Home page serving as the landing page with hero section, featured products, and calls to action.
+ */
 export default function Home() {
   const navigate = useNavigate();
   const snapRef = useRef(null);

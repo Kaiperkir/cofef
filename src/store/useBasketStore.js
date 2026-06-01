@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+/**
+ * Zustand store for managing the shopping basket/cart state (items, open/close state, quantities).
+ */
 export const useBasketStore = create(
   persist(
     (set) => ({
