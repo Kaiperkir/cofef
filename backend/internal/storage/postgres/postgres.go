@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"craft-coffee-backend/internal/domain"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -28,20 +29,18 @@ func New(ctx context.Context, connString string) (*Storage, error) {
 	return &Storage{pool: pool}, nil
 }
 
-func (s *Storage) GetCategories(ctx context.Context) ([]Category, error) {
-	// 1. Напиши SQL запрос: SELECT id, name FROM categories ORDER BY id
-	// 2. Выполни запрос через s.pool.Query(ctx, query)
-	// 3. Не забудь defer rows.Close() (или используй готовую фичу из pgx/v5 - pgx.CollectRows)
-	// 4. Верни срез (slice) полученных категорий
-	query := "SELECT id, name FROM categories ORDER BY id"
+// GetCategories возвращает все категории
+func (s *Storage) GetCategories(ctx context.Context) ([]domain.Category, error) {
+	const query = "SELECT id, name FROM categories ORDER BY id"
+
 	rows, err := s.pool.Query(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute query: %w", err)
 	}
 	defer rows.Close()
 
-	res, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (Category, error) {
-		var c Category
+	res, err := pgx.CollectRows(rows, func(row pgx.CollectableRow) (domain.Category, error) {
+		var c domain.Category
 		err := row.Scan(&c.ID, &c.Name)
 		return c, err
 	})
@@ -53,16 +52,16 @@ func (s *Storage) GetCategories(ctx context.Context) ([]Category, error) {
 }
 
 // GetProducts возвращает список всех активных продуктов вместе с их категориями и вариантами.
-func (s *Storage) GetProducts(ctx context.Context) ([]Product, error) {
-	// 1. Запрос товаров + JOIN категорий
+func (s *Storage) GetProducts(ctx context.Context) ([]domain.Product, error) {
 	queryProducts := `
-	SELECT
-		p.id, p.title, p.description, p.image_url, p.category_id,
+	SELECT 
+		p.id, p.title, p.description, p.image_url, p.category_id, 
 		p.is_top, p.is_weekly, p.is_specialty, p.is_active,
 		c.id, c.name
 	FROM products p
 	LEFT JOIN categories c ON p.category_id = c.id
 	WHERE p.is_active = true
+	ORDER BY p.id DESC
 	`
 
 	rows, err := s.pool.Query(ctx, queryProducts)
@@ -71,13 +70,12 @@ func (s *Storage) GetProducts(ctx context.Context) ([]Product, error) {
 	}
 	defer rows.Close()
 
-	// Используем мапу для быстрого доступа к продукту по ID при добавлении вариантов
-	productsMap := make(map[int64]*Product)
-	var products []Product
+	var products []domain.Product
+	productsMap := make(map[int64]*domain.Product)
 
 	for rows.Next() {
-		var p Product
-		var c Category
+		var p domain.Product
+		var c domain.Category
 		var categoryID *int64
 		var categoryName *string
 
@@ -96,23 +94,15 @@ func (s *Storage) GetProducts(ctx context.Context) ([]Product, error) {
 			p.Category = &c
 		}
 
-		// Инициализируем пустой срез вариантов, чтобы избежать nil в JSON
-		p.Variants = make([]ProductVariant, 0)
+		p.Variants = make([]domain.ProductVariant, 0)
 		products = append(products, p)
 	}
 
-	if err = rows.Err(); err != nil {
-		return nil, fmt.Errorf("rows error: %w", err)
-	}
-
-	// Сохраняем указатели на элементы среза в мапу
 	for i := range products {
 		productsMap[products[i].ID] = &products[i]
 	}
 
-	// 2. Запрос всех вариантов
 	queryVariants := `SELECT id, product_id, weight, price, old_price, stock_quantity FROM product_variants`
-
 	variantRows, err := s.pool.Query(ctx, queryVariants)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query variants: %w", err)
@@ -120,25 +110,25 @@ func (s *Storage) GetProducts(ctx context.Context) ([]Product, error) {
 	defer variantRows.Close()
 
 	for variantRows.Next() {
-		var v ProductVariant
-
-		err := variantRows.Scan(
-			&v.ID, &v.ProductID, &v.Weight, &v.Price, &v.OldPrice, &v.Stock,
-		)
-		if err != nil {
+		var v domain.ProductVariant
+		if err := variantRows.Scan(&v.ID, &v.ProductID, &v.Weight, &v.Price, &v.OldPrice, &v.Stock); err != nil {
 			return nil, fmt.Errorf("failed to scan variant: %w", err)
 		}
 
-		// 3. Группировка
 		if p, ok := productsMap[v.ProductID]; ok {
 			p.Variants = append(p.Variants, v)
 		}
 	}
 
-	if err = variantRows.Err(); err != nil {
-		return nil, fmt.Errorf("variant rows error: %w", err)
-	}
-
-	// 4. Возвращаем собранный []Product
 	return products, nil
+}
+
+// CreateUser создает нового пользователя
+func (s *Storage) CreateUser(ctx context.Context, phone, passwordHash, fullName string) (int64, error) {
+	const q = "INSERT INTO users (phone, password, full_name) VALUES ($1, $2, $3) RETURNING id"
+	var id int64
+	if err := s.pool.QueryRow(ctx, q, phone, passwordHash, fullName).Scan(&id); err != nil {
+		return 0, fmt.Errorf("failed to create user: %w", err)
+	}
+	return id, nil
 }
