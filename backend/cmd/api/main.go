@@ -68,6 +68,7 @@ func main() {
 		r.Get("/categories", h.GetCategories)
 		r.Get("/products", h.GetProducts)
 		r.Post("/auth/register", h.Register)
+		r.Post("/api/auth/login", h.Login)
 	})
 
 	srv := &http.Server{
