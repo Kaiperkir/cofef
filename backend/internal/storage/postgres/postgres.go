@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"craft-coffee-backend/internal/domain"
@@ -131,4 +132,44 @@ func (s *Storage) CreateUser(ctx context.Context, phone, passwordHash, fullName 
 		return 0, fmt.Errorf("failed to create user: %w", err)
 	}
 	return id, nil
+}
+
+// GetUserByPhone возвращает пользователя по номеру телефона
+func (s *Storage) GetUserByPhone(ctx context.Context, phone string) (domain.User, error) {
+	const op = "postgres.GetUserByPhone"
+	const q = "SELECT id, phone, password, full_name, role FROM users WHERE phone = $1"
+
+	var user domain.User
+	err := s.pool.QueryRow(ctx, q, phone).Scan(
+		&user.ID,
+		&user.Phone,
+		&user.Password,
+		&user.FullName,
+		&user.Role,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return domain.User{}, fmt.Errorf("%s: %w", op, domain.ErrUserNotFound)
+		}
+		return domain.User{}, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return user, nil
+}
+
+// SetRefreshToken обновляет refresh токен пользователя
+func (s *Storage) SetRefreshToken(ctx context.Context, userID int64, token string) error {
+	const op = "postgres.SetRefreshToken"
+	const q = "UPDATE users SET refresh_token = $1 WHERE id = $2"
+
+	tag, err := s.pool.Exec(ctx, q, token, userID)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	if tag.RowsAffected() == 0 {
+		return fmt.Errorf("%s: %w", op, domain.ErrUserNotFound)
+	}
+
+	return nil
 }

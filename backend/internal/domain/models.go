@@ -2,6 +2,11 @@ package domain
 
 import (
 	"context"
+	"errors"
+)
+
+var (
+	ErrUserNotFound = errors.New("user not found")
 )
 
 type Category struct {
@@ -47,4 +52,6 @@ type Storage interface {
 	GetCategories(ctx context.Context) ([]Category, error)
 	GetProducts(ctx context.Context) ([]Product, error)
 	CreateUser(ctx context.Context, phone, passwordHash, fullName string) (int64, error)
+	GetUserByPhone(ctx context.Context, phone string) (User, error)
+	SetRefreshToken(ctx context.Context, userID int64, token string) error
 }
