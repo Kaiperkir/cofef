@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -68,7 +69,18 @@ func main() {
 		r.Get("/categories", h.GetCategories)
 		r.Get("/products", h.GetProducts)
 		r.Post("/auth/register", h.Register)
-		r.Post("/api/auth/login", h.Login)
+		r.Post("/auth/login", h.Login)
+
+		r.Group(func(r chi.Router) {
+			r.Use(h.RequireAuth) // Все роуты в этой группе требуют авторизации
+
+			r.Get("/profile/me", func(w http.ResponseWriter, r *http.Request) {
+				userID := r.Context().Value(handlers.UserIDKey).(int64)
+				role := r.Context().Value(handlers.UserRoleKey).(string)
+
+				w.Write([]byte(fmt.Sprintf("Привет, юзер %d с ролью %s!", userID, role)))
+			})
+		})
 	})
 
 	srv := &http.Server{
