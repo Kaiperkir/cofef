@@ -143,12 +143,37 @@ func (s *Storage) CreateUser(ctx context.Context, phone, passwordHash, fullName 
 // GetUserByPhone возвращает пользователя по номеру телефона
 func (s *Storage) GetUserByPhone(ctx context.Context, phone string) (domain.User, error) {
 	const op = "postgres.GetUserByPhone"
-	const q = "SELECT id, phone, password, full_name, role FROM users WHERE phone = $1"
+	const q = "SELECT id, phone, email, password, full_name, role FROM users WHERE phone = $1"
 
 	var user domain.User
 	err := s.pool.QueryRow(ctx, q, phone).Scan(
 		&user.ID,
 		&user.Phone,
+		&user.Email,
+		&user.Password,
+		&user.FullName,
+		&user.Role,
+	)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return domain.User{}, fmt.Errorf("%s: %w", op, domain.ErrUserNotFound)
+		}
+		return domain.User{}, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return user, nil
+}
+
+// GetUserByID возвращает пользователя по ID
+func (s *Storage) GetUserByID(ctx context.Context, id int64) (domain.User, error) {
+	const op = "postgres.GetUserByID"
+	const q = "SELECT id, phone, email, password, full_name, role FROM users WHERE id = $1"
+
+	var user domain.User
+	err := s.pool.QueryRow(ctx, q, id).Scan(
+		&user.ID,
+		&user.Phone,
+		&user.Email,
 		&user.Password,
 		&user.FullName,
 		&user.Role,

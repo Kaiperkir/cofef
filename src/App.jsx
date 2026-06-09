@@ -15,6 +15,7 @@ import About from './pages/About';
 import { useThemeStore } from './store/useThemeStore';
 import { useAuthStore } from './store/useAuthStore';
 import Footer from './components/Footer';
+import AIBarista from './components/AIBarista';
 
 // ──────────────────────────────────────────────────────────
 // Простая GPU-анимация (только opacity, без сдвигов).
@@ -92,6 +93,9 @@ function App() {
           </Routes>
         </AnimatePresence>
       </main>
+      
+      {/* Floating AI Assistant Component */}
+      <AIBarista />
     </div>
   );
 }

@@ -14,6 +14,8 @@ func (h *Handler) RecommendCoffee(w http.ResponseWriter, r *http.Request) {
 	const op = "handlers.RecommendCoffee"
 	log := h.log.With(slog.String("op", op))
 
+	log.Info("received recommendation request")
+
 	var req domain.AIRequest
 	// 1. Распарси r.Body в структуру domain.AIRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -28,10 +30,17 @@ func (h *Handler) RecommendCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 3. Вызови сервис: recommendation, err := service.AskBarista(r.Context(), req.Prompt)
-	recommendation, err := service.AskBarista(r.Context(), req.Prompt)
+	// 3. Получаем список товаров из БД для контекста
+	products, err := h.db.GetProducts(r.Context())
 	if err != nil {
-		// 4. Если ошибка -> залогируй её и верни h.sendError(w, 500, "ИИ-бариста устал")
+		log.Error("failed to get products for AI context", "error", err.Error())
+		// Не прерываемся, просто ИИ ответит без контекста если что
+	}
+
+	// 4. Вызови сервис с контекстом товаров
+	recommendation, err := service.AskBarista(r.Context(), req.Prompt, products)
+	if err != nil {
+		// 5. Если ошибка -> залогируй её и верни h.sendError(w, 500, "ИИ-бариста устал")
 		log.Error("failed to get AI recommendation", "error", err.Error())
 		h.sendError(w, http.StatusInternalServerError, "ИИ-бариста устал, попробуйте позже")
 		return

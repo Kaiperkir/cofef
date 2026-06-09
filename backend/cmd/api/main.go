@@ -79,6 +79,8 @@ func main() {
 
 		r.Group(func(r chi.Router) {
 			r.Use(h.RequireAuth) // Все роуты в этой группе требуют авторизации
+			r.Get("/auth/me", h.GetMe)
+			r.Post("/auth/logout", h.Logout)
 			r.Post("/orders", h.CreateOrder)
 			r.Get("/orders/my", h.GetMyOrders)
 			r.Get("/profile/me", func(w http.ResponseWriter, r *http.Request) {

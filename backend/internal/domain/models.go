@@ -100,6 +100,7 @@ type Storage interface {
 	GetProducts(ctx context.Context) ([]Product, error)
 	CreateUser(ctx context.Context, phone, passwordHash, fullName string) (int64, error)
 	GetUserByPhone(ctx context.Context, phone string) (User, error)
+	GetUserByID(ctx context.Context, id int64) (User, error)
 	SetRefreshToken(ctx context.Context, userID int64, token string) error
 	CreateOrder(ctx context.Context, userID int64, req CreateOrderRequest) (int64, error)
 	GetMyOrders(ctx context.Context, userID int64) ([]Order, error)

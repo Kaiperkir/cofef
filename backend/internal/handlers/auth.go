@@ -133,6 +133,42 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 			"id":       user.ID,
 			"role":     user.Role,
 			"fullName": user.FullName,
+			"phone":    user.Phone,
+			"email":    user.Email,
 		},
 	})
+}
+
+// GetMe возвращает данные текущего пользователя
+func (h *Handler) GetMe(w http.ResponseWriter, r *http.Request) {
+	userID, ok := r.Context().Value(UserIDKey).(int64)
+	if !ok {
+		h.sendError(w, http.StatusUnauthorized, "Не авторизован")
+		return
+	}
+
+	user, err := h.db.GetUserByID(r.Context(), userID)
+	if err != nil {
+		h.sendError(w, http.StatusNotFound, "Пользователь не найден")
+		return
+	}
+
+	h.sendOK(w, http.StatusOK, map[string]any{
+		"user": map[string]any{
+			"id":       user.ID,
+			"role":     user.Role,
+			"fullName": user.FullName,
+			"phone":    user.Phone,
+			"email":    user.Email,
+		},
+	})
+}
+
+// Logout очищает сессию пользователя (удаляет refresh token)
+func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
+	userID, ok := r.Context().Value(UserIDKey).(int64)
+	if ok {
+		_ = h.db.SetRefreshToken(r.Context(), userID, "")
+	}
+	h.sendOK(w, http.StatusOK, map[string]any{"status": "ok"})
 }
