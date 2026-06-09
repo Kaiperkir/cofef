@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MoveRight, Mail, Lock, User, AlertCircle, KeyRound, ChevronDown } from 'lucide-react';
+import { MoveRight, Phone, Lock, User, AlertCircle, KeyRound, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 
@@ -9,8 +9,8 @@ import { useAuthStore } from '../store/useAuthStore';
  */
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [showInviteField, setShowInviteField] = useState(false);
@@ -38,11 +38,11 @@ export default function Auth() {
 
     const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
     const body = isLogin
-      ? { email, password }
-      : { name, email, password, ...(inviteCode.trim() ? { inviteCode: inviteCode.trim() } : {}) };
+      ? { phone, password }
+      : { fullName, phone, password, ...(inviteCode.trim() ? { inviteCode: inviteCode.trim() } : {}) };
 
     try {
-      const response = await fetch(`http://localhost:5000${endpoint}`, {
+      const response = await fetch(`${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -130,9 +130,9 @@ export default function Auth() {
                 <User className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
                 <input
                   type="text"
-                  placeholder="ВАШЕ ИМЯ"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  placeholder="ФИО"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   required={!isLogin}
                   className="w-full bg-[#F6F1E9] dark:bg-[#1C1614] border border-transparent rounded-2xl py-5 pl-16 pr-6 font-bold text-xs tracking-widest text-[#1C1614] dark:text-[#F6F1E9] focus:border-[#C06334] dark:focus:border-[#D4AF37] focus:bg-white dark:focus:bg-[#2A201D] transition-all outline-none placeholder:text-stone-400"
                 />
@@ -142,12 +142,12 @@ export default function Auth() {
 
           {/* Email */}
           <div className="relative">
-            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+            <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
             <input
-              type="email"
-              placeholder="EMAIL"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="tel"
+              placeholder="ТЕЛЕФОН"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               required
               className="w-full bg-[#F6F1E9] dark:bg-[#1C1614] border border-transparent rounded-2xl py-5 pl-16 pr-6 font-bold text-xs tracking-widest text-[#1C1614] dark:text-[#F6F1E9] focus:border-[#C06334] dark:focus:border-[#D4AF37] focus:bg-white dark:focus:bg-[#2A201D] transition-all outline-none placeholder:text-stone-400"
             />

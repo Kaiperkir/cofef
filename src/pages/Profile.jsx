@@ -42,7 +42,7 @@ export default function Profile() {
   const fetchMyOrders = async () => {
     try {
       setLoadingOrders(true);
-      const res = await fetch('http://localhost:5000/api/orders/my', {
+      const res = await fetch('/api/orders/my', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -56,7 +56,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (user?.role === 'ADMIN' && token) {
-      fetch('http://localhost:5000/api/admin/users', {
+      fetch('/api/admin/users', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => res.json())
@@ -99,7 +99,7 @@ export default function Profile() {
   const handleToggleRole = async (userId, currentRole) => {
     const newRole = currentRole === 'SELLER' ? 'USER' : 'SELLER';
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${userId}/role`, {
+      const res = await fetch(`/api/admin/users/${userId}/role`, {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ export default function Profile() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/password', {
+      const res = await fetch('/api/auth/password', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

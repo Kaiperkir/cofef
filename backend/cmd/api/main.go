@@ -22,11 +22,11 @@ import (
 
 const (
 	defaultPort = ":5000"
-	dbConnStr   = "postgres://postgres:1234@localhost:5432/postgres?sslmode=disable"
 )
 
 func main() {
 	env := getEnv("ENV", logger.EnvLocal)
+	dbConnStr := getEnv("DATABASE_URL", "postgres://postgres:1234@localhost:5432/postgres?sslmode=disable")
 	log := logger.SetupLogger(env)
 
 	log.Info("Starting Coffee API", slog.String("env", env))
@@ -54,12 +54,17 @@ func main() {
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000"},
+		AllowedOrigins:   []string{"http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000", "http://127.0.0.1:3000", "http://localhost", "http://127.0.0.1"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
+
+	// Static file serving for uploads
+	workDir, _ := os.Getwd()
+	filesDir := http.Dir(workDir + "/uploads")
+	r.Handle("/uploads/*", http.StripPrefix("/uploads/", http.FileServer(filesDir)))
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -70,10 +75,12 @@ func main() {
 		r.Get("/products", h.GetProducts)
 		r.Post("/auth/register", h.Register)
 		r.Post("/auth/login", h.Login)
+		r.Post("/ai/recommend", h.RecommendCoffee)
 
 		r.Group(func(r chi.Router) {
 			r.Use(h.RequireAuth) // Все роуты в этой группе требуют авторизации
-
+			r.Post("/orders", h.CreateOrder)
+			r.Get("/orders/my", h.GetMyOrders)
 			r.Get("/profile/me", func(w http.ResponseWriter, r *http.Request) {
 				userID := r.Context().Value(handlers.UserIDKey).(int64)
 				role := r.Context().Value(handlers.UserRoleKey).(string)

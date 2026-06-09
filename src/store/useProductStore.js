@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 import { useAuthStore } from './useAuthStore';
 
-const API_URL = 'http://127.0.0.1:5000/api';
+const API_URL = '/api';
 
 /**
  * Zustand store for managing product data (fetching, adding, deleting products).

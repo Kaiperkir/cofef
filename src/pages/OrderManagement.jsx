@@ -71,7 +71,7 @@ export default function OrderManagement() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/orders', {
+      const res = await fetch('/api/orders', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -85,7 +85,7 @@ export default function OrderManagement() {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const res = await fetch(`/api/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: { 
           'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export default function OrderManagement() {
   const deleteOrder = async (orderId) => {
     if (!window.confirm('Вы уверены, что хотите БЕЗВОЗВРАТНО удалить этот заказ из базы?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+      const res = await fetch(`/api/orders/${orderId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

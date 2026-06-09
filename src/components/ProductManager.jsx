@@ -46,7 +46,7 @@ export default function ProductManager({ user }) {
   const [imageFile, setImageFile] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/categories')
+    axios.get('/api/categories')
       .then(res => {
         setCategories(res.data);
         if (res.data.length > 0 && !editId && !formData.categoryId) {
@@ -177,7 +177,7 @@ export default function ProductManager({ user }) {
       if (imageFile) {
         const uploadFormData = new FormData();
         uploadFormData.append('image', imageFile);
-        const uploadRes = await axios.post('http://localhost:5000/api/upload', uploadFormData, {
+        const uploadRes = await axios.post('/api/upload', uploadFormData, {
           headers: { 
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}` 
@@ -204,7 +204,7 @@ export default function ProductManager({ user }) {
         }))
       };
       
-      const url = editId ? `http://localhost:5000/api/products/${editId}` : 'http://localhost:5000/api/products';
+      const url = editId ? `/api/products/${editId}` : '/api/products';
       const method = editId ? 'put' : 'post';
       
       await axios[method](url, sanitizedData, {
