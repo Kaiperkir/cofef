@@ -28,6 +28,9 @@ services:
       - "5000:5000"
     volumes:
       - ./server/uploads:/app/uploads
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     depends_on:
       - db
     restart: unless-stopped

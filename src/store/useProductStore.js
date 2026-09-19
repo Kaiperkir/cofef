@@ -24,8 +24,12 @@ export const useProductStore = create((set, get) => ({
       const res = await axios.get(`${API_URL}/products`, {
         params: { search }
       });
-      // Гарантируем что products всегда массив
-      const data = Array.isArray(res.data) ? res.data : [];
+      const data = Array.isArray(res.data) ? res.data.map(p => {
+        if (p.imageUrl && !p.imageUrl.startsWith('http') && !p.imageUrl.startsWith('/')) {
+          p.imageUrl = `/uploads/${p.imageUrl}`;
+        }
+        return p;
+      }) : [];
       set({ products: data, loading: false });
     } catch (err) {
       console.error('Fetch products error:', err);
@@ -38,7 +42,13 @@ export const useProductStore = create((set, get) => ({
       const res = await axios.get(`${API_URL}/products`, {
         params: { is_weekly: 'true' }
       });
-      return res.data;
+      const data = Array.isArray(res.data) ? res.data.map(p => {
+        if (p.imageUrl && !p.imageUrl.startsWith('http') && !p.imageUrl.startsWith('/')) {
+          p.imageUrl = `/uploads/${p.imageUrl}`;
+        }
+        return p;
+      }) : [];
+      return data;
     } catch (err) {
       console.error('Ошибка при загрузке товаров недели:', err);
       return [];

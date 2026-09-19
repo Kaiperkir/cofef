@@ -54,9 +54,8 @@ func AskBarista(ctx context.Context, userPrompt string, products []domain.Produc
 	// --- 3. МНОГОУРОВНЕВЫЙ ЗАПРОС (Failover Chain / Пинговка) ---
 	// Приоритетный список моделей (от самых быстрых/новых к запасным)
 	models := []string{
-		"gemini-3.1-flash-lite", // Твой приоритет №1
-		"gemini-2.0-flash",      // Твой приоритет №2
-		"gemini-2.0-flash-001",  // Запасная
+		"gemini-3.6-flash",      // Рекомендованная модель
+		"gemini-1.5-flash",      // Запасная
 	}
 
 	for _, model := range models {
